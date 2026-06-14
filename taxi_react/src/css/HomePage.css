@@ -1,0 +1,169 @@
+.fleet-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.fleet-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1a1a1a;
+    border-radius: 12px;
+    padding: 18px 20px;
+    border: 1px solid #333;
+    transition: 0.3s;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.fleet-item:hover {
+    border-color: #F59A2F;
+    transform: translateX(5px);
+}
+
+.fleet-item-name {
+    flex: 1;
+    min-width: 150px;
+}
+
+.fleet-item-name a {
+    color: #F59A2F;
+    text-decoration: none;
+    font-size: 1.15rem;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.fleet-item-name a:hover {
+    color: #ffbc6e;
+}
+
+.fleet-item-details {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+    color: #ccc;
+    font-size: 0.8rem;
+}
+
+.fleet-item-details > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px; /* расстояние между иконкой и текстом */
+}
+
+.fleet-phone-btn {
+    display: inline-block;
+    background: #333;
+    color: #F59A2F;
+    padding: 8px 18px;
+    border-radius: 25px;
+    text-decoration: none;
+    transition: 0.3s;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-family: inherit;
+}
+
+.fleet-phone-btn:hover {
+    background: #F59A2F;
+    color: #000;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #1a1a1a;
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 400px;
+    width: 90%;
+    border: 1px solid #F59A2F;
+}
+
+.modal-content h3 {
+    color: #F59A2F;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.modal-phones {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.modal-phones li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background: #2a2a2a;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.modal-phones li .phone-number {
+    font-size: 1rem;
+}
+
+.modal-call-btn {
+    background: #F59A2F;
+    color: #000;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+    font-size: 0.85rem;
+}
+
+.modal-call-btn:hover {
+    background: #ffae4a;
+    transform: scale(1.05);
+}
+
+.modal-close-btn {
+    width: 100%;
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 0.9rem;
+}
+
+.modal-close-btn:hover {
+    background: #444;
+}
+
+@media (max-width: 768px) {
+    .fleet-item {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .fleet-item-details {
+        justify-content: center;
+    }
+}

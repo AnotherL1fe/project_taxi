@@ -1,0 +1,234 @@
+.taxi-detail-card {
+    max-width: 900px;
+    width: 100%;
+    background: #0d0d0d;
+    border-radius: 28px;
+    padding: 45px 40px;
+    margin: 20px auto;
+    border: 1px solid #2a2a2a;
+    transition: 0.3s;
+}
+
+.taxi-detail-card:hover {
+    border-color: #F59A2F;
+    box-shadow: 0 15px 35px rgba(245, 154, 47, 0.12);
+}
+
+.detail-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #F59A2F;
+    text-align: center;
+    margin-bottom: 35px;
+    padding-bottom: 18px;
+    border-bottom: 3px solid #F59A2F;
+}
+
+.detail-info {
+    margin-bottom: 30px;
+}
+
+.detail-description {
+    color: #e0e0e0;
+    line-height: 1.75;
+    font-size: 1.05rem;
+    margin-bottom: 40px;
+    background: #0a0a0a;
+    padding: 25px 30px;
+    border-radius: 20px;
+    border-left: 4px solid #F59A2F;
+}
+
+.detail-description p {
+    margin-bottom: 18px;
+}
+
+.detail-description h3 {
+    color: #F59A2F;
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+}
+
+.detail-description p:last-child {
+    margin-bottom: 0;
+}
+
+.detail-contacts {
+    background: #111;
+    border-radius: 20px;
+    padding: 30px;
+    border: 1px solid #2a2a2a;
+}
+
+.detail-contacts h3 {
+    color: #F59A2F;
+    font-size: 1.6rem;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.contacts-list {
+    list-style: none;
+    margin-bottom: 30px;
+}
+
+.contacts-list li {
+    padding: 12px 0;
+    color: #ccc;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.contacts-list li:last-child {
+    border-bottom: none;
+}
+
+.contacts-list a {
+    color: #F59A2F;
+    text-decoration: none;
+}
+
+.contacts-list a:hover {
+    text-decoration: underline;
+}
+
+.back-link {
+    color: #F59A2F;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 30px;
+}
+
+.back-link:hover {
+    color: #ffbc6e;
+    transform: translateX(-3px);
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #ccc;
+    font-size: 1.1rem;
+}
+
+.info-value {
+    color: #fff;
+    font-size: 1rem;
+}
+
+.phones-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.phone-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    background: #1a1a1a;
+    border-radius: 12px;
+    border: 1px solid #333;
+    transition: 0.3s;
+}
+
+.phone-item:hover {
+    border-color: #F59A2F;
+}
+
+.phone-number {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #fff;
+}
+
+.call-btn {
+    background: #F59A2F;
+    color: #000;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: 0.3s;
+    font-family: inherit;
+}
+
+.call-btn:hover {
+    background: #ffae4a;
+    transform: scale(1.05);
+}
+
+.no-phone {
+    color: #666;
+    text-align: center;
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .taxi-detail-card {
+        padding: 30px;
+    }
+
+    .detail-title {
+        font-size: 2rem;
+    }
+
+    .detail-description {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .taxi-detail-card {
+        padding: 20px 18px;
+    }
+
+    .detail-title {
+        font-size: 1.5rem;
+    }
+
+    .detail-description {
+        font-size: 0.85rem;
+        padding: 18px 20px;
+    }
+
+    .phone-item {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 360px) {
+    .detail-title {
+        font-size: 1.3rem;
+    }
+
+    .detail-description {
+        font-size: 0.8rem;
+    }
+
+    .detail-contacts h3 {
+        font-size: 1rem;
+    }
+
+    .contacts-list li {
+        font-size: 0.75rem;
+    }
+}
