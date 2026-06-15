@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FiLock } from 'react-icons/fi';
 import logo from '../images/logo_taxi.png';
 import '../css/AdminLogin.css';
@@ -12,7 +12,7 @@ function AdminLogin() {
 
     const handleLogin = (e) => {
         e.preventDefault();
-        
+
         if (password === ADMIN_PASSWORD) {
             sessionStorage.setItem('adminAuthenticated', 'true');
             navigate('/admin');
@@ -24,10 +24,12 @@ function AdminLogin() {
 
     return (
         <>
-            <header className="header">
-                <div className="logo">
-                    <img src={logo} alt="Логотип" className="logo-img" />
-                </div>
+            <header className="admin-header">
+                <Link to="/" className="logo-link">
+                    <div className="logo">
+                        <img src={logo} alt="Логотип" className="logo-img" />
+                    </div>
+                </Link>
             </header>
 
             <main className="main">
