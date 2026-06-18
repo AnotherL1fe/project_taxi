@@ -12,12 +12,6 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Простая админ-авторизация
-const ADMIN_CREDENTIALS = {
-  login: 'admin',
-  password: 'admin123'
-};
-
 // ========== TAXIS ROUTES ==========
 app.get('/api/taxis', async (req: Request, res: Response) => {
   try {
@@ -45,7 +39,6 @@ app.get('/api/taxis/:id', async (req: Request, res: Response) => {
 
 app.post('/api/taxis', async (req: Request, res: Response) => {
   try {
-    // Поддерживаем как старый формат (phone), так и новый (phones)
     let phonesData = req.body.phones;
     if (!phonesData && req.body.phone) {
       phonesData = [req.body.phone];
@@ -74,8 +67,6 @@ app.post('/api/taxis', async (req: Request, res: Response) => {
 app.put('/api/taxis/:id', async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id);
-    
-    // Поддерживаем как старый формат (phone), так и новый (phones)
     let phonesData = req.body.phones;
     if (!phonesData && req.body.phone) {
       phonesData = [req.body.phone];

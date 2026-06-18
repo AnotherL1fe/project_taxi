@@ -82,7 +82,6 @@ export async function deleteArticle(id) {
   return response.json();
 }
 
-// frontend/src/services/api.js
 
 // ========== КОНТАКТЫ ==========
 export async function getContacts() {
