@@ -1,16 +1,596 @@
-# React + Vite
+# 🚕 Такси города Волхов
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Каталог таксопарков города Волхов с админ-панелью для управления контентом.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 📋 Оглавление
 
-## React Compiler
+- [О проекте](#о-проекте)
+- [Технологии](#технологии)
+- [Структура проекта](#структура-проекта)
+- [Установка и запуск](#установка-и-запуск)
+- [Работа с базой данных](#работа-с-базой-данных)
+- [Админ-панель](#админ-панель)
+- [API Эндпоинты](#api-эндпоинты)
+- [Структура базы данных](#структура-базы-данных)
+- [Решение проблем](#решение-проблем)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 📖 О проекте
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Проект представляет собой каталог таксопарков города Волхов. Пользователи могут просматривать список такси, читать статьи о такси, узнавать контактную информацию. Администратор может управлять всем контентом через защищенную админ-панель.
+
+### Основные возможности
+
+- **Публичная часть**:
+  - Просмотр списка таксопарков
+  - Детальная информация о каждом таксопарке (несколько номеров телефонов)
+  - Чтение статей о такси
+  - Страница "О проекте"
+  - Контактная информация
+
+- **Админ-панель**:
+  - Управление таксопарками (CRUD)
+  - Управление статьями (CRUD)
+  - Настройка баннера и текста "О проекте"
+  - Управление контактами
+  - Защита паролем (пароль хранится в БД)
+
+---
+
+## 🛠 Технологии
+
+### Бэкенд
+- **Node.js** - среда выполнения JavaScript
+- **Express.js** - веб-фреймворк
+- **Prisma ORM** - работа с базой данных
+- **PostgreSQL** - реляционная база данных
+- **TypeScript** - типизация
+
+### Фронтенд
+- **React** - библиотека для UI
+- **React Router** - маршрутизация
+- **Vite** - сборщик
+- **CSS** - стилизация
+- **Fetch API** - HTTP запросы
+
+### Инструменты
+- **pgAdmin** - управление PostgreSQL
+- **tsx** - запуск TypeScript
+- **nodemon** - горячая перезагрузка
+
+---
+
+## 📁 Структура проекта
+
+```
+taxi/
+├── backend/
+│   ├── prisma/
+│   │   └── schema.prisma        # Схема базы данных
+│   ├── src/
+│   │   └── server.ts            # Основной сервер
+│   ├── generated/               # Сгенерированные файлы Prisma
+│   ├── .env                     # Переменные окружения
+│   ├── package.json
+│   └── tsconfig.json
+│
+└── frontend/
+    ├── src/
+    │   ├── components/          # React компоненты
+    │   │   ├── Header.jsx
+    │   │   ├── Footer.jsx
+    │   │   ├── Banner.jsx
+    │   │   ├── TaxiCard.jsx
+    │   │   └── ArticleCard.jsx
+    │   ├── pages/               # Страницы приложения
+    │   │   ├── HomePage.jsx
+    │   │   ├── AboutPage.jsx
+    │   │   ├── ContactsPage.jsx
+    │   │   ├── ArticlesPage.jsx
+    │   │   ├── ArticlePage.jsx
+    │   │   ├── TaxiPage.jsx
+    │   │   ├── AdminPage.jsx
+    │   │   └── AdminLogin.jsx
+    │   ├── services/
+    │   │   └── api.js           # API клиент
+    │   ├── css/                 # Стили
+    │   ├── images/              # Изображения
+    │   ├── App.jsx
+    │   └── main.jsx
+    ├── package.json
+    └── vite.config.js
+```
+
+---
+
+## 🚀 Установка и запуск
+
+### Требования
+
+- **Node.js** 
+- **PostgreSQL** 
+- **pgAdmin** (опционально)
+
+### 1. Клонирование репозитория
+
+```bash
+git clone https://github.com/your-username/taxi.git
+cd taxi
+```
+
+### 2. Настройка базы данных PostgreSQL
+
+#### Через pgAdmin:
+
+1. Откройте pgAdmin
+2. Создайте новую базу данных: `taxi`
+3. Выполните SQL запросы для создания таблиц (см. раздел "Структура базы данных")
+
+#### Через командную строку:
+
+```sql
+CREATE DATABASE taxi;
+```
+
+### 3. Настройка бэкенда
+
+```bash
+cd backend
+
+# Установка зависимостей
+npm install
+
+# Создание файла .env
+cp .env.example .env
+```
+
+Отредактируйте `.env`:
+
+```env
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/taxi"
+```
+
+### 4. Настройка Prisma
+
+```bash
+# Генерация Prisma Client
+npx prisma generate
+
+# Применение миграций
+npx prisma migrate dev --name init
+
+# Заполнение базы данных начальными данными (опционально)
+node seed.js
+```
+
+### 5. Запуск бэкенда
+
+```bash
+# Разработка с горячей перезагрузкой
+npm run dev
+
+# Или обычный запуск
+node src/server.ts
+```
+
+Сервер запустится на **http://localhost:3001**
+
+### 6. Настройка фронтенда
+
+```bash
+cd frontend
+
+# Установка зависимостей
+npm install
+
+# Запуск в режиме разработки
+npm run dev
+```
+
+Фронтенд запустится на **http://localhost:5173**
+
+---
+
+## 💾 Работа с базой данных
+
+### Подключение к базе
+
+В файле `backend/.env` укажите строку подключения:
+
+```env
+DATABASE_URL="postgresql://ПОЛЬЗОВАТЕЛЬ:ПАРОЛЬ@localhost:5432/НАЗВАНИЕ_БД"
+```
+
+Примеры:
+```env
+# Стандартная установка PostgreSQL
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/taxi"
+
+# Без пароля
+DATABASE_URL="postgresql://postgres@localhost:5432/taxi"
+
+# Другой порт
+DATABASE_URL="postgresql://postgres:postgres@localhost:5433/taxi"
+```
+
+### Основные команды Prisma
+
+```bash
+# Генерация Prisma Client
+npx prisma generate
+
+# Применение миграций
+npx prisma migrate dev --name имя_миграции
+
+# Просмотр данных в браузере (Prisma Studio)
+npx prisma studio
+
+# Создание миграции вручную
+npx prisma migrate dev --create-only --name имя_миграции
+
+# Применение всех миграций в продакшене
+npx prisma migrate deploy
+
+# Заполнение базы данных
+node seed.js
+```
+
+### Работа с данными через pgAdmin
+
+1. Откройте pgAdmin
+2. Выберите базу данных `taxi`
+3. Откройте Query Tool
+4. Выполняйте SQL запросы
+
+Примеры запросов:
+
+```sql
+-- Просмотр всех такси
+SELECT * FROM "Taxis";
+
+-- Просмотр всех статей
+SELECT * FROM "Articles";
+
+-- Добавление администратора
+INSERT INTO "Admin" (password) VALUES ('admin123');
+
+-- Обновление баннера
+UPDATE "SiteConfig" 
+SET "bannerDesk" = 'https://example.com/banner.jpg' 
+WHERE id = 1;
+```
+
+---
+
+## 🔐 Админ-панель
+
+### Доступ
+
+1. Перейдите на **http://localhost:5173/admin/login**
+2. Введите пароль: **`admin123`** (по умолчанию)
+
+> **Важно**: Первый вход создает администратора в базе данных. Пароль можно изменить в БД через pgAdmin.
+
+### Возможности админ-панели
+
+#### 🚕 Управление таксопарками
+- **Добавление**: название, несколько телефонов, время подачи, цена, класс, описание
+- **Редактирование**: изменение всех полей
+- **Удаление**: удаление таксопарка из базы
+
+#### 📰 Управление статьями
+- **Добавление**: заголовок, содержание, изображение, дата
+- **Редактирование**: изменение контента
+- **Удаление**: удаление статьи
+
+#### ⚙️ Настройки сайта
+- **Баннер**: десктопная и мобильная версии
+- **О проекте**: текст на странице "О проекте"
+
+#### 📞 Контакты
+- Email
+- Телефон
+- Адрес
+- Режим работы
+
+### Как добавить несколько телефонов для такси
+
+1. В админ-панели перейдите на вкладку "Таксопарки"
+2. Нажмите **"Добавить таксопарк"**
+3. В поле "Телефоны" введите первый номер
+4. Нажмите **"➕"** для добавления еще одного поля
+5. Введите дополнительные номера
+6. Заполните остальные поля и сохраните
+
+---
+
+## 📡 API Эндпоинты
+
+Все API запросы отправляются на `http://localhost:3001/api/`
+
+### Такси
+
+| Метод | Эндпоинт | Описание |
+|-------|----------|----------|
+| GET | `/taxis` | Получить все такси |
+| GET | `/taxis/:id` | Получить такси по ID |
+| POST | `/taxis` | Создать такси |
+| PUT | `/taxis/:id` | Обновить такси |
+| DELETE | `/taxis/:id` | Удалить такси |
+
+### Статьи
+
+| Метод | Эндпоинт | Описание |
+|-------|----------|----------|
+| GET | `/articles` | Получить все статьи |
+| GET | `/articles/:id` | Получить статью по ID |
+| POST | `/articles` | Создать статью |
+| PUT | `/articles/:id` | Обновить статью |
+| DELETE | `/articles/:id` | Удалить статью |
+
+### Контакты
+
+| Метод | Эндпоинт | Описание |
+|-------|----------|----------|
+| GET | `/contacts` | Получить контакты |
+| PUT | `/contacts` | Обновить контакты |
+
+### Конфигурация сайта
+
+| Метод | Эндпоинт | Описание |
+|-------|----------|----------|
+| GET | `/site-config` | Получить конфигурацию |
+| PUT | `/site-config` | Обновить конфигурацию |
+
+### Администратор
+
+| Метод | Эндпоинт | Описание |
+|-------|----------|----------|
+| POST | `/admin/login` | Вход в админ-панель |
+| GET | `/admin/check` | Проверка существования админа |
+| PUT | `/admin/password` | Смена пароля |
+
+### Примеры запросов
+
+```javascript
+// Получить все такси
+const response = await fetch('http://localhost:3001/api/taxis');
+const taxis = await response.json();
+
+// Создать такси
+const newTaxi = {
+    name: "Такси Бобер",
+    phones: ["+78005553535", "+78005553536"],
+    time: "от 5 мин",
+    price: "от 5 руб",
+    class: "Эконом и комфорт",
+    description: "Полное описание..."
+};
+
+fetch('http://localhost:3001/api/taxis', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(newTaxi)
+});
+
+// Вход в админ-панель
+fetch('http://localhost:3001/api/admin/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: 'admin123' })
+});
+```
+
+---
+
+## 🗄 Структура базы данных
+
+### Таблица `Taxis`
+
+| Колонка | Тип | Описание |
+|---------|-----|----------|
+| id | SERIAL | Первичный ключ |
+| name | VARCHAR(255) | Название таксопарка |
+| phones | TEXT[] | Массив номеров телефонов |
+| time | VARCHAR(255) | Время подачи |
+| price | VARCHAR(255) | Стоимость |
+| class | VARCHAR(255) | Класс авто |
+| description | TEXT | Полное описание |
+| createdAt | TIMESTAMP | Дата создания |
+| updatedAt | TIMESTAMP | Дата обновления |
+
+### Таблица `Articles`
+
+| Колонка | Тип | Описание |
+|---------|-----|----------|
+| id | SERIAL | Первичный ключ |
+| title | VARCHAR(255) | Заголовок |
+| content | TEXT | Содержание |
+| image | VARCHAR(500) | URL изображения |
+| date | VARCHAR(255) | Дата публикации |
+| createdAt | TIMESTAMP | Дата создания |
+| updatedAt | TIMESTAMP | Дата обновления |
+
+### Таблица `SiteConfig`
+
+| Колонка | Тип | Описание |
+|---------|-----|----------|
+| id | SERIAL | Первичный ключ |
+| aboutText | TEXT | Текст "О проекте" |
+| bannerDesk | VARCHAR(500) | URL десктопного баннера |
+| bannerMobile | VARCHAR(500) | URL мобильного баннера |
+| updatedAt | TIMESTAMP | Дата обновления |
+
+### Таблица `Contacts`
+
+| Колонка | Тип | Описание |
+|---------|-----|----------|
+| id | SERIAL | Первичный ключ |
+| email | VARCHAR(255) | Email |
+| phone | VARCHAR(255) | Телефон |
+| address | VARCHAR(500) | Адрес |
+| workHours | VARCHAR(255) | Режим работы |
+| createdAt | TIMESTAMP | Дата создания |
+| updatedAt | TIMESTAMP | Дата обновления |
+
+### Таблица `Admin`
+
+| Колонка | Тип | Описание |
+|---------|-----|----------|
+| id | SERIAL | Первичный ключ |
+| password | VARCHAR(255) | Пароль администратора |
+| createdAt | TIMESTAMP | Дата создания |
+| updatedAt | TIMESTAMP | Дата обновления |
+
+---
+
+## 🔧 Решение проблем
+
+### Ошибка: Cannot find module 'server.ts'
+
+```bash
+# Проверьте, что файл существует
+ls backend/src/server.ts
+
+# Если нет, создайте его или переименуйте
+mv backend/server.ts backend/src/server.ts
+```
+
+### Ошибка: Prisma Client not initialized
+
+```bash
+npx prisma generate
+```
+
+### Ошибка: Connection refused к БД
+
+```bash
+# Проверьте, запущен ли PostgreSQL
+# Windows
+net start postgresql
+
+# Linux/Mac
+sudo systemctl start postgresql
+
+# Проверьте строку подключения в .env
+```
+
+### Ошибка CORS
+
+Проверьте, что в `server.ts` разрешены нужные источники:
+
+```typescript
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://localhost:5173'],
+  credentials: true
+}));
+```
+
+### Ошибка: port 3001 already in use
+
+```bash
+# Windows - найти и убить процесс
+netstat -ano | findstr :3001
+taskkill /PID <PID> /F
+
+# Linux/Mac
+lsof -i :3001
+kill -9 <PID>
+```
+
+### Страница не загружается
+
+1. Проверьте, что бэкенд запущен: `http://localhost:3001/api/taxis`
+2. Проверьте, что фронтенд запущен: `http://localhost:5173`
+3. Проверьте консоль браузера на ошибки
+4. Проверьте CORS настройки
+
+### Не могу войти в админ-панель
+
+1. Проверьте, что в базе есть администратор:
+```sql
+SELECT * FROM "Admin";
+```
+
+2. Если нет, добавьте:
+```sql
+INSERT INTO "Admin" (password) VALUES ('admin123');
+```
+
+3. Пароль по умолчанию: **`admin123`**
+
+---
+
+## 📝 Полезные команды
+
+### Backend
+
+```bash
+# Запуск в режиме разработки
+cd backend && npm run dev
+
+# Генерация Prisma Client
+npx prisma generate
+
+# Открыть Prisma Studio (GUI для БД)
+npx prisma studio
+
+# Создать миграцию
+npx prisma migrate dev --name имя_миграции
+
+# Заполнить БД тестовыми данными
+node seed.js
+```
+
+### Frontend
+
+```bash
+# Запуск в режиме разработки
+cd frontend && npm run dev
+
+# Сборка для продакшена
+npm run build
+
+# Предпросмотр собранного проекта
+npm run preview
+```
+
+### Docker (опционально)
+
+```bash
+# Запуск PostgreSQL в Docker
+docker run --name taxi-db -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=taxi -p 5432:5432 -d postgres
+
+# Остановка контейнера
+docker stop taxi-db
+
+# Запуск контейнера
+docker start taxi-db
+```
+
+---
+
+## 📞 Контакты
+
+**Email:** info@taxi-city.ru  
+**Телефон:** +7 (800) 123-45-67
+
+---
+
+## 📄 Лицензия
+
+MIT
+
+---
+
+## 👨‍💻 Разработчик
+
+Проект разработан для каталога таксопарков города Волхов.
+
+---
+
+**Спасибо за использование нашего сервиса!** 🚀
+```

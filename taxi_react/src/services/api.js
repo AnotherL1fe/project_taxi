@@ -129,12 +129,53 @@ export async function updateSiteConfig(data) {
 }
 
 // ========== АВТОРИЗАЦИЯ ==========
-export async function adminLogin(credentials) {
-  const response = await fetch(`${API_BASE}/admin/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(credentials)
-  });
-  if (!response.ok) throw new Error('Неверный логин или пароль');
-  return response.json();
+export async function adminLogin(password) {
+  try {
+    const response = await fetch(`${API_BASE}/admin/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password })
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Неверный пароль');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('API Error (adminLogin):', error);
+    throw error;
+  }
+}
+
+export async function adminCheck() {
+  try {
+    const response = await fetch(`${API_BASE}/admin/check`);
+    if (!response.ok) throw new Error('Ошибка проверки администратора');
+    return await response.json();
+  } catch (error) {
+    console.error('API Error (adminCheck):', error);
+    throw error;
+  }
+}
+
+export async function updateAdminPassword(oldPassword, newPassword) {
+  try {
+    const response = await fetch(`${API_BASE}/admin/password`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ oldPassword, newPassword })
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Ошибка обновления пароля');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('API Error (updateAdminPassword):', error);
+    throw error;
+  }
 }

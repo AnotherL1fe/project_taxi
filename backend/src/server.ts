@@ -254,17 +254,77 @@ app.put('/api/site-config', async (req: Request, res: Response) => {
 });
 
 // ========== ADMIN AUTH ==========
+app.get('/api/admin/check', async (req: Request, res: Response) => {
+  try {
+    const admin = await prisma.admin.findFirst();
+    res.json({ exists: !!admin });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.post('/api/admin/login', async (req: Request, res: Response) => {
-  const { login, password } = req.body;
+  const { password } = req.body;
   
-  if (login === ADMIN_CREDENTIALS.login && password === ADMIN_CREDENTIALS.password) {
-    res.json({ 
-      success: true, 
-      message: 'Вход выполнен успешно',
-      token: 'fake-jwt-token'
+  try {
+    if (!password) {
+      return res.status(400).json({ error: 'Пароль обязателен' });
+    }
+
+    let admin = await prisma.admin.findFirst();
+
+    if (!admin) {
+      admin = await prisma.admin.create({
+        data: { password }
+      });
+      return res.json({ 
+        success: true, 
+        message: 'Администратор создан. Вход выполнен.',
+        token: 'fake-jwt-token'
+      });
+    }
+
+    if (password === admin.password) {
+      res.json({ 
+        success: true, 
+        message: 'Вход выполнен успешно',
+        token: 'fake-jwt-token'
+      });
+    } else {
+      res.status(401).json({ error: 'Неверный пароль' });
+    }
+  } catch (error: any) {
+    console.error('Ошибка входа:', error);
+    res.status(500).json({ error: 'Ошибка сервера при авторизации' });
+  }
+});
+
+app.put('/api/admin/password', async (req: Request, res: Response) => {
+  const { oldPassword, newPassword } = req.body;
+  
+  try {
+    if (!oldPassword || !newPassword) {
+      return res.status(400).json({ error: 'Старый и новый пароль обязательны' });
+    }
+    
+    const admin = await prisma.admin.findFirst();
+    
+    if (!admin) {
+      return res.status(404).json({ error: 'Администратор не найден' });
+    }
+    
+    if (oldPassword !== admin.password) {
+      return res.status(401).json({ error: 'Старый пароль неверен' });
+    }
+    
+    const updatedAdmin = await prisma.admin.update({
+      where: { id: admin.id },
+      data: { password: newPassword }
     });
-  } else {
-    res.status(401).json({ error: 'Неверный логин или пароль' });
+    
+    res.json({ success: true, message: 'Пароль обновлен' });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
   }
 });
 

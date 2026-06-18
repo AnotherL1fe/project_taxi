@@ -2,23 +2,34 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiLock } from 'react-icons/fi';
 import logo from '../images/logo_taxi.png';
+import { adminLogin } from '../services/api';
 import '../css/AdminLogin.css';
 
 function AdminLogin() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const ADMIN_PASSWORD = 'admin123';
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
+        setError('');
+        setLoading(true);
 
-        if (password === ADMIN_PASSWORD) {
-            sessionStorage.setItem('adminAuthenticated', 'true');
-            navigate('/admin');
-        } else {
-            setError('Неверный пароль!');
+        try {
+            const result = await adminLogin(password);
+            if (result.success) {
+                sessionStorage.setItem('adminAuthenticated', 'true');
+                navigate('/admin');
+            } else {
+                setError('Неверный пароль!');
+                setPassword('');
+            }
+        } catch (err) {
+            setError(err.message || 'Ошибка при входе. Попробуйте позже.');
             setPassword('');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -44,19 +55,22 @@ function AdminLogin() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Введите пароль"
                                 autoFocus
+                                disabled={loading}
                             />
                         </div>
                         {error && <div className="login-error">{error}</div>}
-                        <button type="submit" className="login-btn">Войти</button>
+                        <button type="submit" className="login-btn" disabled={loading}>
+                            {loading ? 'Проверка...' : 'Войти'}
+                        </button>
                     </form>
                 </div>
             </main>
 
             <footer className="footer">
                 <div className="footer-links">
-                    <a href="/about">О проекте</a>
-                    <a href="/contacts">Контакты</a>
-                    <a href="/articles">Статьи</a>
+                    <Link to="/about">О проекте</Link>
+                    <Link to="/contacts">Контакты</Link>
+                    <Link to="/articles">Статьи</Link>
                 </div>
             </footer>
         </>
