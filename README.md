@@ -72,49 +72,6 @@
 
 ---
 
-## 📁 Структура проекта
-
-```
-taxi/
-├── backend/
-│   ├── prisma/
-│   │   └── schema.prisma        # Схема базы данных
-│   ├── src/
-│   │   └── server.ts            # Основной сервер
-│   ├── generated/               # Сгенерированные файлы Prisma
-│   ├── .env                     # Переменные окружения
-│   ├── package.json
-│   └── tsconfig.json
-│
-└── frontend/
-    ├── src/
-    │   ├── components/          # React компоненты
-    │   │   ├── Header.jsx
-    │   │   ├── Footer.jsx
-    │   │   ├── Banner.jsx
-    │   │   ├── TaxiCard.jsx
-    │   │   └── ArticleCard.jsx
-    │   ├── pages/               # Страницы приложения
-    │   │   ├── HomePage.jsx
-    │   │   ├── AboutPage.jsx
-    │   │   ├── ContactsPage.jsx
-    │   │   ├── ArticlesPage.jsx
-    │   │   ├── ArticlePage.jsx
-    │   │   ├── TaxiPage.jsx
-    │   │   ├── AdminPage.jsx
-    │   │   └── AdminLogin.jsx
-    │   ├── services/
-    │   │   └── api.js           # API клиент
-    │   ├── css/                 # Стили
-    │   ├── images/              # Изображения
-    │   ├── App.jsx
-    │   └── main.jsx
-    ├── package.json
-    └── vite.config.js
-```
-
----
-
 ## 🚀 Установка и запуск
 
 ### Требования
